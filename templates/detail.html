@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% from 'macros.html' import render_field %}
+{% block content %}
+{% for post in stream %}
+        <section>
+            <div class="container">
+                <div class="entry-list single">
+                    <article>
+                        <h1>{{ post.title }}/h1>
+                        <time datetime="2016-01-31">{{ post.timestamp }}</time>
+                        <div class="entry">
+                            <h3>Time Spent:</h3>
+                            <p>1{{ post.timespent }}</p>
+                        </div>
+                    </article>
+                </div>
+            </div>
+            <div class="edit">
+                <p><a href="edit.html">Edit Entry</a></p>
+            </div>
+        </section>
+{% endfor %}
+{% endblock %}

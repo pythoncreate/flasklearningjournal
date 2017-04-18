@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% from 'macros.html' import render_field %}
+{% block content %}
+{% for post in posts %}
+            <div class="container">
+                <div class="entry-list">
+                    <article>
+                        <h2><a href="{{ url_for('view_details', slug=slug) }}">{{ post.title }}</a></h2>
+                        <time data-time="{{ post.timestamp }}" class="distime" datetime="{{ post.timestamp.strftime('%Y-%m-%d') }}">{{ post.timestamp.strftime('%Y-%m-%d') }}</time>
+                    </article>
+                </div>
+            </div>
+ {% endfor %}
+
+ {% endblock %}

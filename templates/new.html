@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+{% from 'macros.html' import render_field %}
+
+{% block content %}
+<div class = "container">
+    <div class = "new-entry">
+        <h2>New Entry</h2>
+<form action='' method = "POST" >
+    {{ form.hidden_tag() }}
+    <label for="title"> Title</label>
+    <div class = "title">
+        {{ render_field(form.title)}}
+    </div>
+    <label for="date"> Date</label>
+     <div class = "date">
+        {{ render_field(form.timestamp)}}
+    </div>
+    <label for="timespent"> Time Spent</label>
+     <div class = "time-spent" type="text">
+        {{ render_field(form.timespent)}}
+    </div>
+    <label for="what-i-learned"> What I Learned</label>
+     <div class = "whatILearned">
+        {{ render_field(form.learned)}}
+    </div>
+    <label for="resources-to-remember"> Resources To Remember</label>
+     <div class = "resources">
+        {{ render_field(form.resources)}}
+    </div>
+
+     <div class="u-full-width">
+    <input type="submit" class="button" value="Create">
+  </div>
+</form>
+    </div>
+</div>
+{% endblock %}
