@@ -1,23 +1,38 @@
 {% extends "layout.html" %}
 {% from 'macros.html' import render_field %}
 {% block content %}
-{% for post in stream %}
         <section>
             <div class="container">
                 <div class="entry-list single">
+
                     <article>
-                        <h1>{{ post.title }}/h1>
-                        <time datetime="2016-01-31">{{ post.timestamp }}</time>
+                        <h1>{{ entry.title }}</h1>
+                        <time data-time="{{ entry.timestamp }}" class="distime" datetime="{{ entry.timestamp.strftime('%Y-%m-%d') }}">{{ entry.timestamp.strftime('%Y-%m-%d') }}</time>
+
                         <div class="entry">
                             <h3>Time Spent:</h3>
-                            <p>1{{ post.timespent }}</p>
+                            <p>{{ entry.timespent }}</p>
                         </div>
+
+                        <div class="entry">
+                            <h3>What I Learned:</h3>
+                            <p>{{ entry.learned }}</p>
+                        </div>
+
+                        <div class="entry">
+                            <h3>Resources to Remember:</h3>
+                            <p>{{ entry.resources }}</p>
+                        </div>
+
                     </article>
                 </div>
             </div>
+
             <div class="edit">
-                <p><a href="edit.html">Edit Entry</a></p>
+
+                <p><a href="{{ url_for('edit', slug=entry.slug) }}">Edit Entry</a> | <a href="{{ url_for('delete', slug=entry.slug) }}">Delete Entry</a> </p>
             </div>
         </section>
-{% endfor %}
+
+
 {% endblock %}

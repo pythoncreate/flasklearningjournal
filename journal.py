@@ -1,7 +1,9 @@
-from flask import (Flask, g, render_template, flash, redirect, url_for, abort)
+from flask import (Flask, g, render_template, flash, redirect, url_for, request)
 from flask_bcrypt import check_password_hash
 from flask_login import (LoginManager, login_user, logout_user,
                          login_required, current_user)
+
+from playhouse.flask_utils import get_object_or_404
 
 from slugify import slugify
 import forms
@@ -95,8 +97,7 @@ def post():
                            title=form.title.data.strip(),
                            timespent=form.timespent.data.strip(),
                            learned=form.learned.data.strip(),
-                           slug=slugify(form.title.data.strip()),
-                           resources=form.resources.data.strip(),
+                           resources=form.resources.data.strip()
                            )
         flash("Message posted! Thanks!", "success")
         return redirect(url_for('index'))
@@ -108,17 +109,36 @@ def entries():
     posts = models.Post.select().limit(100)
     return render_template('index.html', posts=posts)
 
-
-@app.route('/entries/<slug>')
-@app.route('/entries/edit/<slug>')
-@app.route('/entries/delete/<slug>')
-@app.route('/entry')
-
-
-@app.route('/detail/<slug>')
+@app.route('/<slug>/')
 def view_details(slug):
-    posts = models.Post.select().where(models.Post.slug == slug)
-    return render_template('detail.html', posts=posts)
+    query = models.Post.select()
+    entry = get_object_or_404(query, models.Post.slug == slug)
+    return render_template('detail.html', entry=entry)
+
+
+@app.route('/<slug>/edit/', methods=['GET', 'POST'])
+def edit(slug):
+    entry = get_object_or_404(models.Post, models.Post.slug == slug)
+    if request.method == 'POST':
+        entry.title = request.form['title']
+        entry.slug = slugify(entry.title)
+        entry.timespent = request.form['timespent']
+        entry.learned = request.form['learned']
+        entry.resources = request.form['resources']
+        entry.save()
+
+        flash('Entry saved successfully.', 'success')
+
+        return redirect(url_for('index'))
+    return render_template('edit.html', entry=entry)
+
+
+@app.route('/<slug>/delete/', methods=['GET', 'POST'])
+def delete(slug):
+    entry = get_object_or_404(models.Post, models.Post.slug == slug)
+    entry.delete_instance()
+    flash('Record deleted successfully.', 'success')
+    return redirect(url_for('index'))
 
 
 @app.errorhandler(404)

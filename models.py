@@ -4,7 +4,7 @@ from flask_bcrypt import generate_password_hash
 from flask_login import UserMixin
 from peewee import *
 
-DATABASE = SqliteDatabase('jrnl.db')
+DATABASE = SqliteDatabase('jornl.db')
 
 
 class User(UserMixin, Model):
@@ -43,9 +43,15 @@ class Post(Model):
         related_name='posts'
     )
     title = TextField()
-    timespent = IntegerField()
+    timespent = TextField()
     learned = TextField()
     resources = TextField()
+    slug = TextField()
+
+    def __init__(self, *args, **kwargs):
+        if 'slug' not in kwargs:
+            kwargs['slug'] = slugify(kwargs.get('title', ''))
+        super().__init__(*args, **kwargs)
 
     class Meta:
         database = DATABASE

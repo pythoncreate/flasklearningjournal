@@ -1,25 +1,47 @@
 {% extends "layout.html" %}
-{% from 'macros.html' import render_field %}
 {% block content %}
-        <section>
-            <div class="container">
-                <div class="edit-entry">
-                    <h2>Edit Entry</h2>
-                    <form>
-                        <label for="title"> Title</label>
-                        <input id="title" type="text" name="title"><br>
-                        <label for="date">Date</label>
-                        <input id="date" type="date" name="date"><br>
-                        <label for="time-spent"> Time Spent</label>
-                        <input id="time-spent" type="text" name="timeSpent"><br>
-                        <label for="what-i-learned">What I Learned</label>
-                        <textarea id="what-i-learned" rows="5" name="whatILearned"></textarea>
-                        <label for="resources-to-remember">Resources to Remember</label>
-                        <textarea id="resources-to-remember" rows="5" name="ResourcesToRemember"></textarea>
-                        <input type="submit" value="Publish Entry" class="button">
-                        <a href="#" class="button button-secondary">Cancel</a>
-                    </form>
-                </div>
-            </div>
-        </section>
-  {% endblock %}
+<div class = "container">
+    <div class = "new-entry">
+        <h2>New Entry</h2>
+     <form action="{{ url_for('edit', slug=entry.slug) }}" class="form-horizontal" method="post">
+    <div class="form-group">
+      <label for="title" class="col-sm-2 control-label">Title</label>
+      <div class="col-sm-10">
+        <input class="form-control" id="title" name="title" type="text" value="{{ request.form.get('title', entry.title) }}">
+      </div>
+    </div>
+         <div class="form-group">
+      <label for="title" class="col-sm-2 control-label">Date</label>
+      <div class="col-sm-10">
+        <input class="form-control" id="timestamp" name="timestamp" type="text" value="{{ request.form.get('timestamp', entry.timestamp.strftime('%Y-%m-%d')) }}">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="Content" class="col-sm-2 control-label">Timespent</label>
+      <div class="col-sm-10">
+        <input class="form-control" id="timespent" name="timespent" type="text" value="{{ request.form.get('timespent', entry.timespent) }}">
+      </div>
+
+        <div class="form-group">
+      <label for="Content" class="col-sm-2 control-label">What I Learned</label>
+      <div class="col-sm-10">
+        <textarea class="form-control" id="learned" name="learned" type="text">{{ request.form.get('learned', entry.learned) }}</textarea>
+      </div>
+
+
+        <div class="form-group">
+      <label for="Content" class="col-sm-2 control-label">What I Learned</label>
+      <div class="col-sm-10">
+        <textarea class="form-control" id="resources" name="resources" type="text">{{ request.form.get('resources', entry.resources) }}</textarea>
+      </div>
+
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <button class="btn btn-primary" type="submit">Save</button>
+        <a class="btn btn-default" href="{{ url_for('index') }}">Cancel</a>
+      </div>
+    </div>
+  </form>
+    </div>
+</div>
+{% endblock %}
